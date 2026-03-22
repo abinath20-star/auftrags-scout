@@ -1,0 +1,4 @@
+1. db/schema.sql komplett in der D1 Console ausführen.
+2. Danach diese ZIP neu auf Cloudflare Pages deployen.
+3. Beim Dateiimport fragt die App nach dem Arbeitsdatum und speichert den Tagesstand direkt in D1.
+4. Pro Datum wird beim neuen Import automatisch überschrieben.

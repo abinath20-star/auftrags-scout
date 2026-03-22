@@ -1,0 +1,18 @@
+AUFTRAGSSCOUT – CLOUD HINWEIS
+
+1. Pages-Root normal hochladen.
+2. D1 Binding in Pages setzen:
+   Name: DB
+   Datenbank: auftrags-scout-db
+3. db/schema.sql einmal in der D1 Console ausführen.
+4. R2 ist optional. Erst anlegen, wenn PDFs/Bilder online gespeichert werden sollen.
+
+WICHTIG ZUR ORDNERSTRUKTUR:
+Der im Programm gewählte Zielordner ist bereits der Jahresordner, zum Beispiel 2026.
+Die App erstellt darunter nur noch:
+  Stadt / Straße Hausnummer
+Beispiel:
+  Aachen / Aachener Strasse 101
+  Wuerselen / Wilhelmstrasse 10
+
+KEIN doppeltes Jahr im Pfad.

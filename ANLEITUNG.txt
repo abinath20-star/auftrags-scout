@@ -1,0 +1,31 @@
+═══════════════════════════════════════════════════
+  AuftragsScout v22 – Anleitung
+═══════════════════════════════════════════════════
+
+EINRICHTUNG (einmalig, 2 Minuten):
+1. Diesen Ordner "AuftragsScout" auf das Netzlaufwerk 
+   kopieren (z.B. Z:\AuftragsScout\)
+2. START.bat doppelklicken → Edge öffnet die App
+
+TÄGLICH (7:30 Uhr):
+1. START.bat doppelklicken (oder Verknüpfung auf Desktop)
+2. "Excel-Datei wählen" → zur Tagesliste navigieren
+3. App zeigt sofort: welche Aufträge sind deins (X in TT-Spalte)
+4. Grün = schon mal gemacht, Gelb = Straße bekannt, Weiß = neu
+
+NACH DEM ARBEITSTAG:
+→ "In Historie speichern" klicken
+→ nächsten Tag werden deine Straßen als "bekannt" markiert
+
+BACKUP:
+→ "JSON sichern" → Datei auf Netzlaufwerk speichern
+
+TIPP:
+→ Verknüpfung zu START.bat auf den Desktop ziehen
+→ Dann reicht jeden Morgen ein Doppelklick
+═══════════════════════════════════════════════════
+
+
+WICHTIG ZUR ABLAGE:
+Bitte als Zielordner direkt den Jahresordner waehlen, also z.B. 2025 oder 2026.
+Die App erstellt darunter nur noch Stadt / Strasse Hausnummer.

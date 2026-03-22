@@ -1,0 +1,21 @@
+AuftragsScout – Cloudflare Upload Hinweis
+
+Diese ZIP ist als statische Upload-Version für Cloudflare Pages vorbereitet.
+
+Enthaltene Korrekturen:
+- Manifest korrekt eingebunden
+- Theme-Color gesetzt
+- Service Worker Registrierung ergänzt
+- Cache-Version bereinigt
+- Beschriftung "Datei wählen" angepasst
+
+Wichtig:
+- Diese Version ist für statisches Hosting vorbereitet.
+- D1 oder R2 sind noch NICHT erforderlich, solange du nur die App-Dateien hostest.
+- Datei-/Ordnerzugriffe über den Browser funktionieren nur dort, wo der Browser die APIs unterstützt und du die Ordner freigibst.
+- Die CDN-Bibliotheken (Tesseract/XLSX/JSZip) bleiben in dieser Version online eingebunden.
+
+Empfehlung für Cloudflare:
+1. Neues Pages-Projekt anlegen
+2. Diese Dateien als statische Site deployen
+3. Erst danach optional Bindings für D1/R2 hinzufügen
