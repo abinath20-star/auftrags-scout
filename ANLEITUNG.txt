@@ -24,8 +24,3 @@ TIPP:
 → Verknüpfung zu START.bat auf den Desktop ziehen
 → Dann reicht jeden Morgen ein Doppelklick
 ═══════════════════════════════════════════════════
-
-
-WICHTIG ZUR ABLAGE:
-Bitte als Zielordner direkt den Jahresordner waehlen, also z.B. 2025 oder 2026.
-Die App erstellt darunter nur noch Stadt / Strasse Hausnummer.
