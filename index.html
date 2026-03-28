@@ -1,148 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AuftragsScout</title>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .box {
-      background: white;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    button {
-      padding: 8px 12px;
-      margin: 5px;
-      cursor: pointer;
-      border-radius: 6px;
-      border: none;
-      background: #007bff;
-      color: white;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    input {
-      padding: 6px;
-      margin: 5px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-
-    th {
-      background: #eee;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+  <header class="app-header">
+    <div>
+      <h1>AuftragsScout</h1>
+      <p class="sub">Cloudflare Pages + D1 + R2</p>
+    </div>
+    <div id="statusBadge" class="badge badge-ok">Bereit</div>
+  </header>
 
-  <h1>AuftragsScout</h1>
+  <main class="layout">
+    <section class="card">
+      <h2>Einstellungen</h2>
+      <div class="grid two">
+        <label>
+          <span>Mein Kürzel</span>
+          <input id="myCode" type="text" maxlength="8" placeholder="TT" autocomplete="off">
+        </label>
+        <label>
+          <span>Vollständiger Name</span>
+          <input id="myName" type="text" placeholder="Thangarajah" autocomplete="name">
+        </label>
+        <label>
+          <span>Arbeitsdatum</span>
+          <input id="workDate" type="date">
+        </label>
+        <label>
+          <span>Suche</span>
+          <input id="searchInput" type="search" placeholder="Ort, Straße, Auftrag …">
+        </label>
+      </div>
+      <div class="actions">
+        <button id="saveSettingsBtn" type="button">Einstellungen speichern</button>
+        <button id="loadDayBtn" type="button" class="secondary">Tag aus Cloud laden</button>
+      </div>
+    </section>
 
-  <!-- Einstellungen -->
-  <div class="box">
-    <h3>Einstellungen</h3>
+    <section class="card">
+      <h2>CSV importieren</h2>
+      <div class="grid two">
+        <label>
+          <span>Datei wählen</span>
+          <input id="fileInput" type="file" accept=".csv,text/csv">
+        </label>
+        <label>
+          <span>CSV-Trennzeichen</span>
+          <select id="delimiterSelect">
+            <option value="auto">Automatisch erkennen</option>
+            <option value=";">Semikolon ;</option>
+            <option value=",">Komma ,</option>
+            <option value="&#9;">Tab</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="importBtn" type="button">CSV laden</button>
+        <button id="saveCloudBtn" type="button">In D1 speichern</button>
+        <button id="exportBtn" type="button" class="secondary">CSV exportieren</button>
+      </div>
+      <p class="hint">Regel: 1 Tag = 1 Stand. Speichern überschreibt denselben Tag vollständig.</p>
+    </section>
 
-    <label>Kürzel:</label>
-    <input id="code" placeholder="TT">
+    <section class="card">
+      <h2>R2 Datei-Upload</h2>
+      <div class="grid two">
+        <label>
+          <span>Datei</span>
+          <input id="r2FileInput" type="file">
+        </label>
+        <label>
+          <span>Pfad in R2</span>
+          <input id="r2Path" type="text" placeholder="2026/Aachen/Aachener Strasse 101/Skizze.pdf">
+        </label>
+      </div>
+      <div class="actions">
+        <button id="uploadR2Btn" type="button">Zu R2 hochladen</button>
+        <button id="listR2Btn" type="button" class="secondary">R2-Liste laden</button>
+      </div>
+      <div id="r2List" class="list" aria-live="polite"></div>
+    </section>
 
-    <label>Name:</label>
-    <input id="name" placeholder="Name">
+    <section class="card">
+      <div class="section-head">
+        <h2>Tagesliste</h2>
+        <div id="countInfo" aria-live="polite">0 Einträge</div>
+      </div>
+      <div class="table-wrap" role="region" aria-label="Aufgabenliste" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th data-col="zeit">Zeit</th>
+              <th data-col="ort">Ort</th>
+              <th data-col="strasse">Straße</th>
+              <th data-col="sparte">Sparte</th>
+              <th data-col="auftrag">Auftrag</th>
+              <th data-col="zustaendig">Zuständig</th>
+            </tr>
+          </thead>
+          <tbody id="tasksBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-    <br>
-    <button onclick="saveSettings()">Speichern</button>
-  </div>
+  <template id="rowTemplate">
+    <tr>
+      <td data-k="zeit"></td>
+      <td data-k="ort"></td>
+      <td data-k="strasse"></td>
+      <td data-k="sparte"></td>
+      <td data-k="auftrag"></td>
+      <td data-k="zustaendig"></td>
+    </tr>
+  </template>
 
-  <!-- Datei laden -->
-  <div class="box">
-    <h3>Datei laden (CSV)</h3>
-
-    <input type="file" id="fileInput">
-    <button onclick="loadFile()">Laden</button>
-  </div>
-
-  <!-- Tabelle -->
-  <div class="box">
-    <h3>Tagesliste</h3>
-
-    <table id="table">
-      <thead>
-        <tr>
-          <th>Zeit</th>
-          <th>Ort</th>
-          <th>Straße</th>
-          <th>Sparte</th>
-          <th>Auftrag</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <script>
-    function saveSettings() {
-      localStorage.setItem("code", document.getElementById("code").value);
-      localStorage.setItem("name", document.getElementById("name").value);
-      alert("Gespeichert!");
-    }
-
-    function loadFile() {
-      const file = document.getElementById("fileInput").files[0];
-      if (!file) return alert("Bitte Datei wählen");
-
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const rows = text.split("\n");
-
-        const table = document.querySelector("#table tbody");
-        table.innerHTML = "";
-
-        rows.forEach(row => {
-          const cols = row.split(";");
-          if (cols.length < 5) return;
-
-          const tr = document.createElement("tr");
-
-          cols.forEach(col => {
-            const td = document.createElement("td");
-            td.textContent = col;
-            tr.appendChild(td);
-          });
-
-          table.appendChild(tr);
-        });
-      };
-
-      reader.readAsText(file);
-    }
-  </script>
-
+  <script src="app.js"></script>
 </body>
 </html>
